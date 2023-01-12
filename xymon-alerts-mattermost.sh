@@ -13,11 +13,17 @@ service=$BBSVCNAME              # The name of the service that the alert is abou
 alert_color=$BBCOLORLEVEL       # The color of the alert: "red", "yellow" or "purple"
 alert_msg=$BBALPHAMSG           # The full text of the status log triggering the alert
 alert_title="$BBHOSTSVC $level" # HOSTNAME.SERVICE that the alert is about.
+recovered="$RECOVERED"          # Is "1" if the service has recovered.
 
 # If I'm gonna output a message, mind as well timestamp it.
 time_stamp() {
   date +%Y-%m-%d:%H:%M:%S"%R $*"
 }
+
+# If the alert is recovered, then we want to display some green instead of the original color:
+if [ $RECOVERED -eq 1 ]; then
+  alert_color="green"
+fi
 
 # Check the color and set Mattermost payload variables.
 case $alert_color in
